@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import api.FlickrApi
@@ -19,17 +20,14 @@ import retrofit2.converter.scalars.ScalarsConverterFactory
 
 private const val TAG = "PhotoGalleryFragment"
 
-class PhotoGalleryFragment<View> : Fragment() {
+class PhotoGalleryFragment<View : Any> : Fragment() {
+    private lateinit var photoGalleryViewModel: PhotoGalleryViewModel
     private lateinit var photoRecyclerView: RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val flickrLiveData: LiveData<List<GalleryItem>> =
-            FlickrFetchr().fetchPhotos()
-        flickrLiveData.observe(
-            this,
-            Observer { galleryItems -> Log.d(TAG, "Response received:$galleryItems")
-            })
+        photoGalleryViewModel =
+            ViewModelProviders.of(this).get(PhotoGalleryViewModel::class.java)
     }
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -42,6 +40,15 @@ class PhotoGalleryFragment<View> : Fragment() {
         photoRecyclerView = view.findViewById(R.id.photo_recycler_view)
         photoRecyclerView.layoutManager = GridLayoutManager(context, 3)
         return view
+    }
+    override fun onViewCreated(view: android.view.View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        photoGalleryViewModel.galleryItemLiveData.observe(
+            viewLifecycleOwner,
+            Observer { galleryItems ->
+                Log.d(TAG, "Have gallery items from ViewModel $galleryItems")
+// Обновить данные, поддерживающие представление утилизатора
+            })
     }
     companion object {
         fun   newInstance()   = PhotoGalleryFragment<Any>()
