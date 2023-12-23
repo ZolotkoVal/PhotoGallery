@@ -25,6 +25,7 @@ import retrofit2.converter.scalars.ScalarsConverterFactory
 
 private const val TAG = "PhotoGalleryFragment"
 
+@Suppress("DEPRECATION")
 class PhotoGalleryFragment<View : Any> : Fragment() {
     private lateinit var photoGalleryViewModel: PhotoGalleryViewModel
     private lateinit var photoRecyclerView: RecyclerView
