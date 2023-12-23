@@ -3,6 +3,8 @@ package com.bignerdranch.android.photogallery
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -29,6 +31,8 @@ class PhotoGalleryFragment<View : Any> : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        retainInstance = true
+        setHasOptionsMenu(true)
         photoGalleryViewModel =
             ViewModelProviders.of(this).get(PhotoGalleryViewModel::class.java)
     }
@@ -51,6 +55,12 @@ class PhotoGalleryFragment<View : Any> : Fragment() {
             Observer { galleryItems ->
                 photoRecyclerView.adapter = PhotoAdapter(galleryItems)
             })
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu,
+            inflater)
+        inflater.inflate(R.menu.fragment_photo_gallery, menu)
     }
     private class PhotoHolder(itemImageView: ImageView)
         : RecyclerView.ViewHolder(itemImageView)
