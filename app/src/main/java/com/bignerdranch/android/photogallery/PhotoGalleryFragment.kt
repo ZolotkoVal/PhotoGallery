@@ -17,6 +17,10 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.work.Constraints
+import androidx.work.NetworkType
+import androidx.work.OneTimeWorkRequest
+import androidx.work.WorkManager
 import api.FlickrApi
 import com.squareup.picasso.Picasso
 import retrofit2.Call
@@ -38,7 +42,19 @@ class PhotoGalleryFragment<View : Any> : Fragment() {
         setHasOptionsMenu(true)
         photoGalleryViewModel =
             ViewModelProviders.of(this).get(PhotoGalleryViewModel::class.java)
+        val constraints = Constraints.Builder()
+            .setRequiredNetworkType(
+                NetworkType
+                .UNMETERED)
+            .build()
+        val workRequest = OneTimeWorkRequest
+            .Builder(PollWorker::class.java)
+            .setConstraints(constraints)
+            .build()
+        WorkManager.getInstance()
+            .enqueue(workRequest)
     }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -80,6 +96,9 @@ class PhotoGalleryFragment<View : Any> : Fragment() {
                     return false
                 }
             })
+            setOnSearchClickListener {
+                searchView.setQuery(photoGalleryViewModel.searchTerm, false)
+            }
                 }
     }
 
