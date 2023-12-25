@@ -17,5 +17,6 @@ class PhotoGalleryApplication : Application() {
             val notificationManager:
                     NotificationManager = getSystemService(NotificationManager::class.java)
             notificationManager.createNotificationChannel(channel)
-        } }
+        }
+    }
 }
