@@ -29,5 +29,8 @@ class PhotoGalleryViewModel(private val app: Application) : AndroidViewModel(app
         QueryPreferences.setStoredQuery(app, query)
         mutableSearchTerm.value = query
     }
+    fun showDatabaseGallery(){
+        val crimeListLiveData  = GalleryRepository.get()
+    }
 
 }

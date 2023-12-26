@@ -31,6 +31,7 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.scalars.ScalarsConverterFactory
 import java.util.concurrent.TimeUnit
+import android.widget.Toast
 
 private const val TAG = "PhotoGalleryFragment"
 private const val POLL_WORK = "POLL_WORK"
@@ -134,6 +135,10 @@ class PhotoGalleryFragment<View : Any> : Fragment() {
                 activity?.invalidateOptionsMenu()
                 return true
                 }
+            R.id.menu_item_database_photos -> {
+                photoGalleryViewModel.showDatabaseGallery()
+                true
+            }
             else -> super.onOptionsItemSelected(item)
         }
     }
